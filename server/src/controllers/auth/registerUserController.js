@@ -2,7 +2,11 @@ const bcrypt = require("bcrypt");
 const { connectToDatabase, getDb } = require("../../mongodb");
 
 const registerUserController = async (req, res) => {
-	const { email, password } = req.body;
+	const { name, email, password } = req.body;
+
+	 newuser = await name.replaceAll(" ","").concat(email.replaceAll(" ","").replaceAll("@","").replaceAll(".",""));
+	 console.log(newuser);
+	 
 
 	try {
 		await connectToDatabase();
@@ -14,7 +18,7 @@ const registerUserController = async (req, res) => {
 		}
     else {
       const hash = await bcrypt.hash(password, 10);
-      const result = await db.collection("users").insertOne({ user: email, password: hash });  
+      const result = await db.collection("users").insertOne({ name:name, email: email, user:newuser, password: hash });  
       console.log(result);
       return res.status(201).json({ message: "User created", user: result["insertedId"] });
     }

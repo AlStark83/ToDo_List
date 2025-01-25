@@ -10,10 +10,12 @@ const loginUserController = async (req, res) => {
 		await connectToDatabase();
 		const db = getDb("users");
 
-		const user = await db.collection("users").findOne({ user: email });
+		const user = await db.collection("users").findOne({ email: email });
 
+
+		//TODO : cambiar el mensaje de error a Invalid credentials 
 		if (!user) {
-			return res.status(401).json({ message: "Invalid credentials" });
+			return res.status(401).json({ message: "User not Found" });
 		}
 
 		const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -22,7 +24,7 @@ const loginUserController = async (req, res) => {
 			return res.status(401).json({ message: "Invalid credentials" });
 		}
 
-		const token = jwt.sign({ user: user.user }, process.env.JWT_SECRET, {
+		const token = jwt.sign({ name: user.name, user: user.user }, process.env.JWT_SECRET, {
 			expiresIn: "1h",
 		});
 
