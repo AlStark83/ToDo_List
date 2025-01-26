@@ -2,48 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Estilo global */
+/* Tus estilos globales opcionales */
 html,
 body {
-  @apply bg-gray-900 text-gray-100 min-h-screen flex items-center justify-center antialiased;
-  font-family: 'Inter', sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
-/* Asegura que todo el contenido esté centrado */
-#root,
-#__next {
-  @apply w-full h-full flex items-center justify-center;
-}
-
-/* Estilos responsivos básicos */
-.container {
-  @apply max-w-screen-md w-full px-4 sm:px-6 lg:px-8;
-}
-
-/* Botones */
-button {
-  @apply bg-blue-500 text-white font-semibold py-2 px-4 rounded transition-all duration-300;
-}
-button:hover {
-  @apply bg-blue-600;
-}
-button:disabled {
-  @apply bg-gray-500 cursor-not-allowed;
-}
-
-/* Links */
-a {
-  @apply text-blue-400 underline;
-}
-a:hover {
-  @apply text-blue-300;
-}
-
-/* Formularios */
-input,
-textarea,
-select {
-  @apply bg-gray-800 text-gray-100 border border-gray-700 rounded p-2 w-full focus:ring-2 focus:ring-blue-500 outline-none;
+  @apply bg-gray-50 text-gray-900;
 }

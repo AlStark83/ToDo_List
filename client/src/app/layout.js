@@ -1,23 +1,21 @@
-"use client";
-
-import { QueryClient, QueryClientProvider } from "react-query";
+import "./globals.css";
+import Providers from "./providers";
 import Navbar from "@/components/Navbar";
-import "@/app/globals.css";
-const queryClient = new QueryClient();
+
+export const metadata = {
+  title: "Task Manager",
+  description: "App de tareas con Next.js",
+};
 
 export default function RootLayout({ children }) {
-	return (
-		<html lang="es">
-			<head>
-				<title>To-Do List App</title>
-        <description>description: "App de tareas con autenticación y subtareas"</description>
-			</head>
-			<body className="bg-gray-100 text-gray-900 font-sans">
-				<QueryClientProvider client={queryClient}>
-					<Navbar></Navbar>
-					<div>{children}</div>
-				</QueryClientProvider>
-			</body>
-		</html>
-	);
+  return (
+    <html lang="es">
+      <body className="min-h-screen flex flex-col">
+        <Providers>
+          <Navbar />
+          <main className="flex-1 container mx-auto p-4">{children}</main>
+        </Providers>
+      </body>
+    </html>
+  );
 }

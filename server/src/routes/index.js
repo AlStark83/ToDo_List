@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const authRouter = require("./authRouter.js");
 const taskRouter = require("./taskRouter.js");
+const authenticate  = require("../middleware/authenticate.js");
 
 const mainRouter = Router();
 
@@ -9,6 +10,6 @@ mainRouter
 		res.send("Hello World");
 	})
 	.use("/auth", authRouter)
-	.use("/tasks", taskRouter);
+	.use("/tasks", authenticate, taskRouter);
 
 module.exports = mainRouter;

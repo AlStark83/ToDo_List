@@ -1,56 +1,51 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import axiosClient from "@/lib/axiosClient";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-	const { register, handleSubmit, formState: { errors } } = useForm();
-	const router = useRouter();
+  const { register, handleSubmit } = useForm();
+  const router = useRouter();
 
-	const onSubmit = async (data) => {
-		try {
-			const response = await fetch("http://localhost:5000/auth/login", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(data),
-			});
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`); 
-      }
-      const result = await response.json();
-			localStorage.setItem("token", result.token);
-			alert(`Es bueno tenerte de vuelta. Iniciando sesión...`);
-			router.push("/tasks");
-			console.log("Login exitoso:", result);
-		} catch (error) {
-			console.error("Error al iniciar sesión:", error.message);
-		}
-	};
+  const onSubmit = async (data) => {
+    try {
+      const response = await axiosClient.post("/auth/login/", data);
+      const { token } = response.data;
 
-	return (
-		<form onSubmit={handleSubmit(onSubmit)} className="max-w-md mx-auto">
-			<h2 className="text-xl font-bold mb-4">Iniciar sesión</h2>
-			<input
-				type="email"
-				placeholder="Correo electrónico"
-				className="w-full p-2 mb-4 border rounded"
-				{...register("email", { required: "El correo es obligatorio" })}
-			/>
-      {errors.email && <span className="text-red-500">{errors.email.message}</span>}
+      localStorage.setItem("token", token);
 
-			<input
-				type="password"
-				placeholder="Contraseña"
-				className="w-full p-2 mb-4 border rounded"
-				{...register("password", { required: "La contraseña es obligatoria" })}
+      alert("Login exitoso");
+      router.push("/tasks");
+    } catch (error) {
+      console.error("Error al iniciar sesión:", error);
+      alert(error.response?.data?.message || "Error al iniciar sesión");
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="max-w-md mx-auto">
+      <h2 className="text-xl font-bold mb-4">Iniciar Sesión</h2>
+
+      <input
+        {...register("email", { required: true })}
+        type="email"
+        placeholder="Correo electrónico"
+        className="block w-full border p-2 mb-2"
       />
-      {errors.password && <span className="text-red-500">{errors.password.message}</span>}
-		
-			<button
-				type="submit"
-				className="bg-blue-500 text-white py-2 px-4 rounded">
-				Iniciar sesión
-			</button>
-		</form>
-	);
+      <input
+        {...register("password", { required: true })}
+        type="password"
+        placeholder="Contraseña"
+        className="block w-full border p-2 mb-4"
+      />
+
+      <button
+        type="submit"
+        className="bg-blue-500 text-white px-4 py-2 rounded w-full"
+      >
+        Iniciar Sesión
+      </button>
+    </form>
+  );
 }
