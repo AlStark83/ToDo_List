@@ -3,17 +3,19 @@
 import { useForm } from "react-hook-form";
 import axiosClient from "@/lib/axiosClient";
 import { useRouter } from "next/navigation";
+import { useAuth } from "../../../hooks/AuthProvider";
 
 export default function LoginPage() {
   const { register, handleSubmit } = useForm();
   const router = useRouter();
+  const { login } = useAuth();
 
   const onSubmit = async (data) => {
     try {
       const response = await axiosClient.post("/auth/login/", data);
       const { token } = response.data;
 
-      localStorage.setItem("token", token);
+      login(token);
 
       alert("Login exitoso");
       router.push("/tasks");

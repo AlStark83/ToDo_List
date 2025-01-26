@@ -2,29 +2,23 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useAuth } from "../hooks/AuthProvider";
+
+
 
 export default function Navbar() {
+  const { isLoggedIn, logout } = useAuth();
   const router = useRouter();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setIsLoggedIn(true);
-    }
-  }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    setIsLoggedIn(false); 
+    logout(); 
     router.push("/auth/login");
   };
 
   return (
-    <nav className="bg-white shadow p-4 mb-4 flex justify-between items-center">
-      <div>
-        <Link href="/" className="font-bold mr-4">
+    <nav className="bg-white shadow p-4 mb-4 flex justify-between items-center ">
+      <div >
+        <Link onClick={handleLogout} href="/" className="font-bold mr-4">
           Inicio
         </Link>
         <Link href="/tasks" className="mr-4">
@@ -40,12 +34,7 @@ export default function Navbar() {
             Logout
           </button>
         ) : (
-          <Link
-            href="/auth/login"
-            className="bg-blue-500 text-white px-4 py-2 rounded"
-          >
-            Login
-          </Link>
+        null
         )}
       </div>
     </nav>
